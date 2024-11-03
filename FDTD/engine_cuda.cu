@@ -107,41 +107,6 @@ __device__ void UpdateCurrents(CUDA_VECTOR ***volt, CUDA_VECTOR ***curr, CUDA_VE
 	curr[x][y][z] = i;
 }
 
-/*__global__ void ManyTS(Engine_CUDA *instance, unsigned int startTS, unsigned int iterTS, unsigned int numLines[])
-{
-	const unsigned int pos[] = {
-		blockDim.x * blockIdx.x + threadIdx.x,
-		blockDim.y * blockIdx.y + threadIdx.y,
-		blockDim.z * blockIdx.z + threadIdx.z
-	};
-
-	if(pos[0] >= numLines[0] || pos[1] >= numLines[1] || pos[2] >= numLines[2]) return;
-
-	const unsigned int endTS = startTS + iterTS;
-	bool runUpdateCurrents = (pos[0] < numLines[0]-1 && pos[1] < numLines[1]-1 && pos[2] < numLines[2]-1);
-
-	cooperative_groups::grid_group grid = cooperative_groups::this_grid();
-
-	for (unsigned int ts=startTS; ts<endTS; ++ts)
-	{
-		//voltage updates with extensions
-		//DoPreVoltageUpdates();
-		UpdateVoltages(instance, pos[0], pos[1], pos[2]);
-		//DoPostVoltageUpdates();
-		//Apply2Voltages();
-
-		grid.sync();
-
-		//current updates with extensions
-		//DoPreCurrentUpdates();
-		if(runUpdateCurrents) UpdateCurrents(instance, pos[0], pos[1], pos[2]);
-		//DoPostCurrentUpdates();
-		//Apply2Current();
-
-		grid.sync();
-	}
-}*/
-
 __global__ void VoltageKernel(CUDA_VECTOR ***volt, CUDA_VECTOR ***curr, CUDA_VECTOR ***opvi, CUDA_VECTOR ***opvv, unsigned int numLinesX, unsigned int numLinesY, unsigned int numLinesZ) {
 	const unsigned int pos[] = {
 		blockDim.x * blockIdx.x + threadIdx.x,
@@ -168,19 +133,6 @@ __global__ void CurrentKernel(CUDA_VECTOR ***volt, CUDA_VECTOR ***curr, CUDA_VEC
 
 bool Engine_CUDA::IterateTS(unsigned int iterTS)
 {
-	/*
-	Engine_CUDA *instance = this;
-	void *args[] = {
-		&instance,
-		&numTS,
-		&iterTS,
-		&numLines
-	};
-	cudaError_t err = cudaLaunchCooperativeKernel((void*)&ManyTS, m_gridDim, m_blockDim, args);
-	if(err) throw std::runtime_error("CUDA kernel launch failure: " + std::string(cudaGetErrorString(err)));
-	numTS += iterTS;
-	*/
-
 	unsigned int endTS = numTS + iterTS;
 	for(; numTS < endTS; numTS++)
 	{
