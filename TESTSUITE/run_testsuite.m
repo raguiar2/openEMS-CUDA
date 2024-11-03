@@ -18,7 +18,7 @@ cd( folder );
 addpath( [folder filesep 'helperscripts'] );
 
 % openEMS options
-options = {'--engine=multithreaded', '--engine=sse-compressed', '--engine=sse', '--engine=basic'};
+options = {'--engine=cuda', '--engine=multithreaded', '--engine=sse-compressed', '--engine=sse', '--engine=basic'};
 
 for o=1:numel(options)
 

@@ -23,7 +23,7 @@ end
 % clean openEMS_options
 openEMS_options = regexprep( openEMS_options, '--engine=\w+', '' );
 
-engines = {'--engine=basic' '--engine=sse' '--engine=sse-compressed' '--engine=multithreaded'};
+engines = {'--engine=basic' '--engine=sse' '--engine=sse-compressed' '--engine=multithreaded' '--engine=cuda'};
 % engines = [engines {'--engine=sse-compressed-linear' '--engine=multithreaded-linear'}];
 
 global Sim_Path Sim_CSX
