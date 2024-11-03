@@ -7,7 +7,13 @@ ELSE()
 ENDIF()
 
 PROJECT(openEMS CXX C)
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.8)
+
+if(${WITH_CUDA})
+  enable_language(CUDA)
+endif()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 # default
 set(LIB_VERSION_MAJOR 0)
@@ -68,6 +74,10 @@ if (WITH_MPI)
 	INCLUDE_DIRECTORIES( ${MPI_INCLUDE_PATH} )
 
 	message(STATUS "Found MPI. INCLUDE " ${MPI_INCLUDE_PATH})
+endif()
+
+if(${WITH_CUDA})
+  ADD_DEFINITIONS(-DWITH_CUDA)
 endif()
 
 # Set locations of extra CMake modules
